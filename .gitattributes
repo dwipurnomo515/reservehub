@@ -1,0 +1,12 @@
+# Normalisasi semua file teks ke LF di repository
+* text=auto eol=lf
+
+# Script Windows memang butuh CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# File biner: jangan diubah sama sekali
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

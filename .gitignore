@@ -1,0 +1,15 @@
+# Secrets — JANGAN PERNAH di-commit
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+
+# Docker volumes lokal
+docker/data/
