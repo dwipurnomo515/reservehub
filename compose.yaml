@@ -1,21 +1,32 @@
-services:
+x-app: &app
+  build:
+    context: ./backend
+    dockerfile: ../docker/php/Dockerfile
+  image: reservehub-app:dev
+  pull_policy: build 
+  volumes:
+    - ./backend:/var/www/html
+  environment:
+    DB_HOST: postgres
+    DB_PORT: 5432
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
 
+services:
   app:
-    build:
-      context: ./backend
-      dockerfile: ../docker/php/Dockerfile
-    volumes:
-      - ./backend:/var/www/html
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+    <<: *app
+
+  queue:
+    <<: *app
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    user: www-data
+    restart: unless-stopped
+    stop_grace_period: 60s
 
   nginx:
     image: nginx:1.30-alpine

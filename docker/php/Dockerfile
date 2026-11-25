@@ -12,6 +12,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ARG UID=1000
 ARG GID=1000
 RUN groupmod -o -g ${GID} www-data \
-    && usermod -o -u ${UID} -g ${GID} www-data
+    && usermod -o -u ${UID} -g ${GID} www-data \
+    && chown www-data:www-data /var/www
 
 WORKDIR /var/www/html
