@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      # DEVELOPMENT ONLY — production credentials come from a secret store
+      POSTGRES_DB: reservehub
+      POSTGRES_USER: reservehub
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reservehub -d reservehub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:
